@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ResumoTube</title>
+<meta name="description" content="">
+<style>
+:root{--bg:#f2f4fa;--sf:#fff;--tx:#14182b;--mu:#5d6380;--bd:#dde1ee;--ac:#5b4bff;--on:#fff;--r:14px;--fs:16px;--g:18px;--ff:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0f1e;--sf:#171a2d;--tx:#eef0fa;--mu:#9aa0bd;--bd:#2a2e48;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d0f1e;--sf:#171a2d;--tx:#eef0fa;--mu:#9aa0bd;--bd:#2a2e48;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--tx);font:var(--fs)/1.55 var(--ff)}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 40px}
+.top{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:1.15em;letter-spacing:-.02em}
+.lg{display:grid;place-items:center;width:30px;height:22px;border-radius:7px;background:var(--ac);color:var(--on);font-size:.7em}
+.acts{display:flex;gap:6px}
+.ib{min-width:42px;height:42px;border-radius:999px;border:1px solid var(--bd);background:var(--sf);padding:0 12px}
+h1{font-size:clamp(1.9rem,8vw,2.9rem);line-height:1.05;letter-spacing:-.035em;margin:22px 0 10px;font-weight:800}
+.sub{color:var(--mu);margin:0 0 20px}
+.sf{display:flex;flex-direction:column;gap:10px}
+.sf input{width:100%;height:58px;border-radius:var(--r);border:2px solid var(--bd);background:var(--sf);padding:0 16px;font-size:1.05em}
+.sf input:focus{border-color:var(--ac);outline:none}
+.btn{height:54px;border:0;border-radius:var(--r);background:var(--ac);color:var(--on);font-weight:700;padding:0 22px}
+.btn.alt{background:var(--sf);color:var(--tx);border:1px solid var(--bd);height:42px;padding:0 14px;font-weight:600}
+.btn.sm{height:42px;padding:0 16px}
+.meta{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;color:var(--mu);font-size:.85em;margin-top:12px}
+.meta select{background:var(--sf);border:1px solid var(--bd);border-radius:8px;padding:4px 6px}
+section{margin-top:var(--g)}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:16px}
+h2{font-size:1.2em;margin:0 0 6px;letter-spacing:-.01em}
+h3{font-size:1em;margin:0 0 8px}
+.res{display:flex;gap:12px;width:100%;text-align:left;background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:10px;margin-bottom:10px}
+.res:hover{border-color:var(--ac)}
+.th{position:relative;flex:0 0 120px;aspect-ratio:16/9;border-radius:calc(var(--r) - 4px);color:#fff}
+.th i{position:absolute;right:5px;bottom:5px;background:rgba(0,0,0,.75);font-style:normal;font-size:.72em;padding:1px 6px;border-radius:5px}
+.res b{display:block;line-height:1.3}
+.res small{color:var(--mu)}
+#player{aspect-ratio:16/9;border-radius:var(--r);overflow:hidden;background:#000}
+#player iframe{width:100%;height:100%;border:0}
+.ph{height:100%;display:grid;place-content:center;text-align:center;gap:4px;color:#fff;background:linear-gradient(135deg,#232857,#5b4bff)}
+.ph span{font-size:2em}
+.row{display:flex;gap:8px}
+.row input{flex:1;min-width:0;height:46px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);padding:0 12px}
+.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--bd);margin-top:var(--g)}
+.tabs button{border:0;background:none;padding:12px 14px;white-space:nowrap;color:var(--mu);border-bottom:3px solid transparent;font-weight:600}
+.tabs button[aria-selected="true"]{color:var(--tx);border-color:var(--ac)}
+.seg{display:flex;gap:6px;margin-bottom:12px}
+.seg button{border:1px solid var(--bd);background:var(--sf);border-radius:999px;padding:6px 14px}
+.seg button[aria-pressed="true"]{background:var(--ac);color:var(--on);border-color:var(--ac)}
+.ts{display:flex;gap:10px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--bd);padding:10px 0}
+.ts b{flex:0 0 52px;color:var(--ac);font-variant-numeric:tabular-nums}
+mark{background:color-mix(in srgb,var(--ac) 30%,transparent);color:inherit;border-radius:3px}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.msg{padding:10px 12px;border-radius:12px;margin-bottom:8px;max-width:92%}
+.msg.u{background:var(--ac);color:var(--on);margin-left:auto}
+.msg.a{background:var(--bg);border:1px solid var(--bd)}
+.ad{margin-top:28px;color:var(--mu);text-align:center;font-size:.72em}.ad .slot{margin:4px auto 0;max-width:320px;min-height:50px;border-radius:8px;background:var(--sf);opacity:.7}
+.aff{display:grid;gap:10px}
+.aff a{display:block;text-decoration:none;color:inherit;border:1px solid var(--bd);border-radius:var(--r);padding:12px;background:var(--sf)}
+.aff small{color:var(--mu)}
+.sk div{height:16px;border-radius:8px;margin-bottom:10px;background:linear-gradient(90deg,var(--bd),var(--sf),var(--bd));background-size:200% 100%;animation:sh 1.2s infinite linear}
+.sk .big{height:200px}
+@keyframes sh{to{background-position:-200% 0}}
+@media(prefers-reduced-motion:reduce){.sk div{animation:none}}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:.9em;z-index:20}
+dialog{border:1px solid var(--bd);border-radius:var(--r);background:var(--sf);color:var(--tx);width:min(440px,92vw);padding:18px;max-height:88vh}
+dialog::backdrop{background:rgba(0,0,0,.55)}
+.fld{display:grid;gap:4px;margin:12px 0}
+.fld input[type=text],.fld select{height:42px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);padding:0 10px}
+.fld input[type=range]{width:100%}
+.chk{display:flex;gap:10px;align-items:center;margin:12px 0}
+.sw{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.sw button{width:34px;height:34px;border-radius:50%;border:2px solid var(--bd)}
+.plans{display:grid;gap:10px;margin:12px 0}
+.plan{border:1px solid var(--bd);border-radius:var(--r);padding:12px}
+.plan.pro{border:2px solid var(--ac)}
+footer{margin-top:28px;color:var(--mu);font-size:.8em;text-align:center}
+body.cp .card{padding:10px}
+html.cjk{line-break:strict}html.cjk body{line-height:1.7}html.cjk h1,html.cjk h2,html.cjk .logo{letter-spacing:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+ <div class="logo"><span class="lg">▶</span><span id="brand">ResumoTube</span></div>
+ <div class="acts">
+  <button class="ib" id="bPrem" aria-label="Ver plano Premium">★ Premium</button>
+  <button class="ib" id="bTheme" aria-label="Alternar tema claro ou escuro">◐</button>
+  <button class="ib" id="bCfg" aria-label="Personalizar o site">⚙</button>
+ </div>
+</header>
+<main>
+ <h1>Entenda qualquer vídeo em segundos</h1>
+ <p class="sub">Cole um link do YouTube ou busque pelo tema. Você recebe resumo, momentos-chave e transcrição.</p>
+ <div class="sf" role="search">
+  <label for="q" class="sr">Link do YouTube ou busca</label>
+  <input id="q" type="text" inputmode="url" autocomplete="off" placeholder="Cole o link ou digite um tema">
+  <button class="btn" id="go">Resumir vídeo</button>
+ </div>
+ <div class="meta">
+  <span id="quota"></span>
+  <label>Idioma <select id="lang" aria-label="Idioma"><option value="pt">Português (BR)</option><option value="en">English</option><option value="es">Español</option><option value="ja">日本語</option><option value="zh-CN">简体中文</option><option value="zh-TW">繁體中文</option></select></label>
+  <span>Demonstração com dados simulados</span>
+ </div>
+ <section id="out" aria-live="polite"></section>
+ 
+ <section id="hist" hidden><h2>Histórico desta sessão</h2><div id="histList"></div></section>
+ <section id="aff">
+  <h2>Ferramentas recomendadas</h2>
+  <div class="aff">
+   <a href="#" rel="sponsored noopener"><b>Caderno de estudos</b><br><small>Link de afiliado de exemplo.</small></a>
+   <a href="#" rel="sponsored noopener"><b>Editor de legendas</b><br><small>Link de afiliado de exemplo.</small></a>
+   <a href="#" rel="sponsored noopener"><b>Curso de produtividade</b><br><small>Link de afiliado de exemplo.</small></a>
+  </div>
+ </section>
+</main>
+<!-- Anúncios: apenas 1 banner discreto no rodapé, sem pop-ups, sem vídeo com som, nunca durante o carregamento. -->
+<div class="ad" role="complementary" aria-label="Espaço publicitário"><small>Anúncio</small><div class="slot"></div></div>
+<footer>Não somos afiliados ao YouTube. Vídeos são exibidos pelo player oficial.</footer>
+</div>
+
+<dialog id="cfgD" aria-labelledby="cfgT">
+ <h2 id="cfgT">Personalizar</h2>
+ <div class="fld"><label for="c_name">Nome do site</label><input type="text" id="c_name" data-k="name" maxlength="24"></div>
+ <div class="fld"><span>Cor de destaque</span><div class="sw" id="sw"></div></div>
+ <div class="fld"><label for="c_theme">Tema</label><select id="c_theme" data-k="theme"><option value="auto">Automático</option><option value="light">Claro</option><option value="dark">Escuro</option></select></div>
+ <div class="fld"><label for="c_fs">Tamanho do texto</label><input type="range" id="c_fs" data-k="fs" min="14" max="21"></div>
+ <div class="fld"><label for="c_ff">Fonte</label><select id="c_ff" data-k="ff"><option value="sans">Moderna</option><option value="serif">Com serifa</option><option value="mono">Monoespaçada</option></select></div>
+ <div class="fld"><label for="c_r">Arredondamento dos cantos</label><input type="range" id="c_r" data-k="r" min="2" max="26"></div>
+ <div class="fld"><label for="c_len">Resumo padrão</label><select id="c_len" data-k="len"><option value="curto">Curto</option><option value="medio">Médio</option><option value="detalhado">Detalhado</option></select></div>
+ <div class="fld"><label for="c_lang">Idioma da interface</label><select id="c_lang" data-k="lang"><option value="pt">Português (BR)</option><option value="en">English</option><option value="es">Español</option><option value="ja">日本語</option><option value="zh-CN">简体中文</option><option value="zh-TW">繁體中文</option></select></div>
+ <div class="fld"><label for="c_slang">Idioma do resumo</label><select id="c_slang" data-k="slang"><option value="auto">Igual à interface</option><option value="pt">Português (BR)</option><option value="en">English</option><option value="es">Español</option><option value="ja">日本語</option><option value="zh-CN">简体中文</option><option value="zh-TW">繁體中文</option></select></div>
+ <label class="chk"><input type="checkbox" id="c_cp" data-k="cp"> Layout compacto</label>
+ <label class="chk"><input type="checkbox" id="c_aff" data-k="aff"> Mostrar ferramentas recomendadas</label>
+ <div class="row"><button class="btn alt" id="cfgReset">Restaurar padrão</button><button class="btn sm" id="cfgOk">Concluir</button></div>
+</dialog>
+
+<dialog id="prem" aria-labelledby="premT">
+ <h2 id="premT">Vá além do limite gratuito</h2>
+ <p id="premMsg" style="color:var(--mu);margin:0">Valores ilustrativos. Nenhum pagamento é processado nesta versão.</p>
+ <div class="plans">
+  <div class="plan"><b>Grátis</b><br><small>5 vídeos por dia, com anúncios discretos.</small></div>
+  <div class="plan pro"><b>Premium · R$ 19/mês</b><br><small>Vídeos ilimitados, resumo de playlist e canal, exportação completa, sem anúncios.</small></div>
+ </div>
+ <div class="fld"><label for="pc">Código de parceiro</label><div class="row"><input type="text" id="pc" autocomplete="off" autocapitalize="characters" maxlength="20" placeholder="Código de parceiro"><button class="btn alt" id="pcGo">Aplicar</button></div><small id="pcMsg" role="status" style="color:var(--mu)"></small></div>
+ <div class="row"><button class="btn alt" id="premX">Agora não</button><button class="btn sm" id="premGo">Quero ser avisado</button></div>
+</dialog>
+<div id="toast" hidden role="status"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const p2=n=>String(n).padStart(2,"0");
+const fmt=s=>{s=Math.round(s);const h=Math.floor(s/3600),m=Math.floor(s%3600/60);return(h?h+":":"")+p2(m)+":"+p2(s%60)};
+const LIMIT=5;
+const DEF={name:"ResumoTube",ac:"#5b4bff",theme:"auto",fs:16,ff:"sans",r:14,cp:false,len:"curto",lang:"pt",slang:"auto",aff:true};
+const COLORS=["#5b4bff","#0a8f6a","#e0482f","#d6246e","#1c7ed6","#222222"];
+const FF={sans:'system-ui,-apple-system,"Segoe UI",Roboto,sans-serif',serif:'Georgia,"Times New Roman",serif',mono:'ui-monospace,Menlo,Consolas,monospace'};
+/* ---------- idiomas ---------- */
+const UI=["pt","en","ja","zh-CN","zh-TW","es"],HL={pt:"pt-BR",en:"en",ja:"ja","zh-CN":"zh-CN","zh-TW":"zh-TW",es:"es"};
+const CJK='"Hiragino Sans","Noto Sans JP","PingFang SC","PingFang TC","Microsoft YaHei","Microsoft JhengHei","Yu Gothic",';
+function detectLang(){
+ // TODO (opcional): se o backend enviar o país (ex.: cabeçalho CF-IPCountry), use-o aqui como pista extra.
+ const map=l=>{l=(l||"").toLowerCase();if(l.startsWith("ja"))return"ja";if(l.startsWith("zh"))return/(tw|hk|mo|hant)/.test(l)?"zh-TW":"zh-CN";if(l.startsWith("pt"))return"pt";if(l.startsWith("en"))return"en";if(l.startsWith("es"))return"es";return null};
+ for(const l of(navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language])){const m=map(l);if(m)return m}
+ let z="";try{z=Intl.DateTimeFormat().resolvedOptions().timeZone||""}catch(e){}
+ if(z==="Asia/Tokyo")return"ja";
+ if(/^Asia\/(Shanghai|Chongqing|Urumqi)$/.test(z))return"zh-CN";
+ if(/^Asia\/(Taipei|Hong_Kong|Macau)$/.test(z))return"zh-TW";
+ return"en";
+}
+// Chave = texto em português. Colunas: en, ja, zh-CN, zh-TW. Textos sem tradução ficam em português.
+const ROWS=[
+["Ver plano Premium","View Premium plan","プレミアムプランを見る","查看高级版","查看進階版"],
+["Alternar tema claro ou escuro","Switch light or dark theme","ライト/ダークテーマを切り替え","切换浅色或深色主题","切換淺色或深色主題"],
+["Personalizar o site","Customize the site","サイトをカスタマイズ","自定义网站","自訂網站"],
+["Entenda qualquer vídeo em segundos","Understand any video in seconds","どんな動画も数秒で理解","几秒钟看懂任何视频","幾秒鐘看懂任何影片"],
+["Cole um link do YouTube ou busque pelo tema. Você recebe resumo, momentos-chave e transcrição.","Paste a YouTube link or search by topic. Get a summary, key moments and a transcript.","YouTubeのリンクを貼るか、テーマで検索。要約、重要シーン、文字起こしが届きます。","粘贴 YouTube 链接或按主题搜索，即可获得摘要、关键时刻和文字稿。","貼上 YouTube 連結或依主題搜尋，即可取得摘要、關鍵時刻和逐字稿。"],
+["Link do YouTube ou busca","YouTube link or search","YouTubeリンクまたは検索","YouTube 链接或搜索","YouTube 連結或搜尋"],
+["Cole o link ou digite um tema","Paste a link or type a topic","リンクを貼るかテーマを入力","粘贴链接或输入主题","貼上連結或輸入主題"],
+["Resumir vídeo","Summarize video","動画を要約","总结视频","摘要影片"],
+["Idioma","Language","言語","语言","語言"],
+["Demonstração com dados simulados","Demo with simulated data","シミュレーションデータのデモ","使用模拟数据的演示","使用模擬資料的示範"],
+["Espaço publicitário","Ad space","広告スペース","广告位","廣告空間"],
+["Histórico desta sessão","History (this session)","このセッションの履歴","本次会话历史","本次工作階段記錄"],
+["Ferramentas recomendadas","Recommended tools","おすすめツール","推荐工具","推薦工具"],
+["Caderno de estudos","Study notebook","学習ノート","学习笔记本","學習筆記本"],
+["Editor de legendas","Subtitle editor","字幕エディタ","字幕编辑器","字幕編輯器"],
+["Curso de produtividade","Productivity course","生産性向上コース","效率课程","效率課程"],
+["Link de afiliado de exemplo.","Example affiliate link.","アフィリエイトリンクの例です。","联盟链接示例。","聯盟連結範例。"],
+["Não somos afiliados ao YouTube. Vídeos são exibidos pelo player oficial.","We are not affiliated with YouTube. Videos are shown with the official player.","当サイトはYouTubeとは無関係です。動画は公式プレーヤーで表示されます。","本站与 YouTube 无关联。视频通过官方播放器显示。","本站與 YouTube 無關聯。影片透過官方播放器顯示。"],
+["Personalizar","Customize","カスタマイズ","自定义","自訂"],
+["Nome do site","Site name","サイト名","网站名称","網站名稱"],
+["Cor de destaque","Accent color","アクセントカラー","强调色","強調色"],
+["Tema","Theme","テーマ","主题","主題"],
+["Automático","Automatic","自動","自动","自動"],
+["Claro","Light","ライト","浅色","淺色"],
+["Escuro","Dark","ダーク","深色","深色"],
+["Tamanho do texto","Text size","文字サイズ","文字大小","文字大小"],
+["Fonte","Font","フォント","字体","字型"],
+["Moderna","Modern","モダン","现代","現代"],
+["Com serifa","Serif","明朝体","衬线","襯線"],
+["Monoespaçada","Monospace","等幅","等宽","等寬"],
+["Arredondamento dos cantos","Corner roundness","角の丸み","圆角大小","圓角大小"],
+["Resumo padrão","Default summary","既定の要約","默认摘要","預設摘要"],
+["Curto","Short","短め","简短","簡短"],
+["Médio","Medium","標準","中等","中等"],
+["Detalhado","Detailed","詳細","详细","詳細"],
+["Idioma da interface","Interface language","表示言語","界面语言","介面語言"],
+["Idioma do resumo","Summary language","要約の言語","摘要语言","摘要語言"],
+["Igual à interface","Same as interface","表示言語と同じ","与界面相同","與介面相同"],
+["Layout compacto","Compact layout","コンパクト表示","紧凑布局","緊湊版面"],
+["Mostrar ferramentas recomendadas","Show recommended tools","おすすめツールを表示","显示推荐工具","顯示推薦工具"],
+["Restaurar padrão","Reset to default","初期設定に戻す","恢复默认","恢復預設"],
+["Concluir","Done","完了","完成","完成"],
+["Vá além do limite gratuito","Go beyond the free limit","無料の上限を超える","突破免费额度","突破免費額度"],
+["Valores ilustrativos. Nenhum pagamento é processado nesta versão.","Illustrative prices. No payment is processed in this version.","金額は例です。このバージョンでは決済は行われません。","价格仅为示例，此版本不处理任何支付。","價格僅為範例，此版本不處理任何付款。"],
+["Grátis","Free","無料","免费","免費"],
+["5 vídeos por dia, com anúncios discretos.","5 videos per day, with discreet ads.","1日5本まで、控えめな広告つき。","每天 5 个视频，含少量广告。","每天 5 部影片，含少量廣告。"],
+["Premium · R$ 19/mês","Premium · R$ 19/month","プレミアム · R$ 19/月","高级版 · R$ 19/月","進階版 · R$ 19/月"],
+["Vídeos ilimitados, resumo de playlist e canal, exportação completa, sem anúncios.","Unlimited videos, playlist and channel summaries, full export, no ads.","動画無制限、プレイリストとチャンネルの要約、完全エクスポート、広告なし。","无限视频、播放列表和频道摘要、完整导出、无广告。","無限影片、播放清單與頻道摘要、完整匯出、無廣告。"],
+["Agora não","Not now","今はしない","暂不","暫不"],
+["Quero ser avisado","Notify me","通知を受け取る","通知我","通知我"],
+["Hoje","Today","本日","今天","今日"],
+["vídeos grátis","free videos","本の無料動画","个免费视频","部免費影片"],
+["Carregando","Loading","読み込み中","加载中","載入中"],
+["Resultados para","Results for","検索結果：","搜索结果：","搜尋結果："],
+["Só a resposta","Just the answer","答えだけ","只要答案","只要答案"],
+["Ex.: quanto custa?","E.g. how much does it cost?","例：いくらかかる？","例如：多少钱？","例如：多少錢？"],
+["O que você quer saber do vídeo","What do you want to know about the video","動画について知りたいこと","想了解视频的什么","想了解影片的什麼"],
+["Buscar","Search","検索","搜索","搜尋"],
+["Resumo","Summary","要約","摘要","摘要"],
+["Momentos-chave","Key moments","重要シーン","关键时刻","關鍵時刻"],
+["Transcrição","Transcript","文字起こし","文字稿","逐字稿"],
+["Perguntas","Questions","質問","提问","提問"],
+["Copiar Markdown","Copy Markdown","Markdownをコピー","复制 Markdown","複製 Markdown"],
+["Exportar para Notion","Export to Notion","Notionへエクスポート","导出到 Notion","匯出到 Notion"],
+["Baixar .md","Download .md",".mdをダウンロード","下载 .md","下載 .md"],
+["Procurando…","Searching…","検索中…","搜索中…","搜尋中…"],
+["Não encontrei isso no vídeo. Tente outras palavras.","I couldn’t find that in the video. Try other words.","動画内に見つかりませんでした。別の言葉をお試しください。","视频中没有找到相关内容，请换个说法。","影片中找不到相關內容，請換個說法。"],
+["Toque para ir ao trecho","Tap to jump to the moment","タップしてその場面へ","点按跳转到该片段","點按跳轉到該片段"],
+["Pergunte qualquer coisa sobre o vídeo.","Ask anything about the video.","動画について何でも聞いてください。","可以随便问关于视频的问题。","可以隨意詢問關於影片的問題。"],
+["Sua pergunta","Your question","質問","你的问题","你的問題"],
+["Escreva sua pergunta","Write your question","質問を入力","输入你的问题","輸入你的問題"],
+["Enviar","Send","送信","发送","傳送"],
+["Buscar na transcrição","Search the transcript","文字起こしを検索","搜索文字稿","搜尋逐字稿"],
+["Copiar","Copy","コピー","复制","複製"],
+["Baixar .txt","Download .txt",".txtをダウンロード","下载 .txt","下載 .txt"],
+["Baixar .srt","Download .srt",".srtをダウンロード","下载 .srt","下載 .srt"],
+["Nada encontrado nessa transcrição.","Nothing found in this transcript.","この文字起こしには見つかりませんでした。","文字稿中没有找到内容。","逐字稿中找不到內容。"],
+["Segundo o vídeo, aos","According to the video, at","動画によると、","视频中，在","影片中，在"],
+["Não encontrei isso no vídeo.","I couldn’t find that in the video.","動画内に見つかりませんでした。","视频中没有找到。","影片中找不到。"],
+["Player oficial do YouTube","Official YouTube player","YouTube公式プレーヤー","YouTube 官方播放器","YouTube 官方播放器"],
+["Simulado · posição","Simulated · position","シミュレーション · 位置","模拟 · 位置","模擬 · 位置"],
+["Simulação: a IA real traduziria este texto para o idioma escolhido.","Simulation: the real AI would translate this text into the chosen language.","シミュレーション：実際のAIが選択した言語に翻訳します。","模拟：真实的 AI 会将此文本翻译成所选语言。","模擬：真實的 AI 會將此文字翻譯成所選語言。"],
+["Cole um link ou digite um tema.","Paste a link or type a topic.","リンクを貼るかテーマを入力してください。","请粘贴链接或输入主题。","請貼上連結或輸入主題。"],
+["Link inválido. Use um link de vídeo do YouTube.","Invalid link. Use a YouTube video link.","無効なリンクです。YouTube動画のリンクを使ってください。","链接无效，请使用 YouTube 视频链接。","連結無效，請使用 YouTube 影片連結。"],
+["Padrão restaurado.","Defaults restored.","初期設定に戻しました。","已恢复默认。","已恢復預設。"],
+["Anotado! Avisaremos quando o Premium abrir.","Noted! We’ll tell you when Premium opens.","了解！プレミアム開始時にお知らせします。","已记录！高级版上线时会通知你。","已記錄！進階版上線時會通知你。"],
+["Copiado!","Copied!","コピーしました！","已复制！","已複製！"],
+["Markdown copiado!","Markdown copied!","Markdownをコピーしました！","Markdown 已复制！","Markdown 已複製！"],
+["Copiado! Cole direto em uma página do Notion.","Copied! Paste it straight into a Notion page.","コピーしました！Notionのページにそのまま貼り付けてください。","已复制！直接粘贴到 Notion 页面即可。","已複製！直接貼到 Notion 頁面即可。"],
+["Transcrição copiada!","Transcript copied!","文字起こしをコピーしました！","文字稿已复制！","逐字稿已複製！"],
+["Se o download não iniciar, use Copiar.","If the download doesn’t start, use Copy.","ダウンロードが始まらない場合は「コピー」を使ってください。","如果下载没有开始，请使用“复制”。","如果下載沒有開始，請使用「複製」。"],
+["Download indisponível aqui. Use Copiar.","Download unavailable here. Use Copy.","ここではダウンロードできません。「コピー」を使ってください。","此处无法下载，请使用“复制”。","此處無法下載，請使用「複製」。"],
+["Digite o que você procura.","Type what you’re looking for.","探したい内容を入力してください。","请输入你要找的内容。","請輸入你要找的內容。"]
+];
+// Espanhol das linhas acima, na mesma ordem.
+const ES=['Ver plan Premium','Cambiar tema claro u oscuro','Personalizar el sitio','Entiende cualquier video en segundos','Pega un enlace de YouTube o busca por tema. Recibes resumen, momentos clave y transcripción.','Enlace de YouTube o búsqueda','Pega el enlace o escribe un tema','Resumir video','Idioma','Demostración con datos simulados','Espacio publicitario','Historial de esta sesión','Herramientas recomendadas','Cuaderno de estudio','Editor de subtítulos','Curso de productividad','Enlace de afiliado de ejemplo.','No estamos afiliados a YouTube. Los videos se muestran con el reproductor oficial.','Personalizar','Nombre del sitio','Color de acento','Tema','Automático','Claro','Oscuro','Tamaño del texto','Fuente','Moderna','Con serifa','Monoespaciada','Redondeo de esquinas','Resumen predeterminado','Corto','Medio','Detallado','Idioma de la interfaz','Idioma del resumen','Igual que la interfaz','Diseño compacto','Mostrar herramientas recomendadas','Restablecer','Listo','Supera el límite gratuito','Valores ilustrativos. En esta versión no se procesa ningún pago.','Gratis','5 videos por día, con anuncios discretos.','Premium · R$ 19/mes','Videos ilimitados, resumen de listas y canales, exportación completa, sin anuncios.','Ahora no','Avísame','Hoy','videos gratis','Cargando','Resultados para','Solo la respuesta','Ej.: ¿cuánto cuesta?','Qué quieres saber del video','Buscar','Resumen','Momentos clave','Transcripción','Preguntas','Copiar Markdown','Exportar a Notion','Descargar .md','Buscando…','No encontré eso en el video. Prueba otras palabras.','Toca para ir al momento','Pregunta lo que quieras sobre el video.','Tu pregunta','Escribe tu pregunta','Enviar','Buscar en la transcripción','Copiar','Descargar .txt','Descargar .srt','No se encontró nada en esta transcripción.','Según el video, a los','No encontré eso en el video.','Reproductor oficial de YouTube','Simulado · posición','Simulación: la IA real traduciría este texto al idioma elegido.','Pega un enlace o escribe un tema.','Enlace no válido. Usa un enlace de video de YouTube.','Valores restablecidos.','¡Anotado! Te avisaremos cuando abra Premium.','¡Copiado!','¡Markdown copiado!','¡Copiado! Pégalo directo en una página de Notion.','¡Transcripción copiada!','Si la descarga no empieza, usa Copiar.','Descarga no disponible aquí. Usa Copiar.','Escribe lo que buscas.'];
+// Novas linhas (colunas: en, ja, zh-CN, zh-TW, es).
+const ROWS2=[
+['Código de parceiro','Partner code','パートナーコード','合作伙伴代码','合作夥伴代碼','Código de socio'],
+['Aplicar','Apply','適用','应用','套用','Aplicar'],
+['Código inválido. Confira e tente de novo.','Invalid code. Check it and try again.','無効なコードです。確認してもう一度お試しください。','代码无效，请检查后重试。','代碼無效，請檢查後重試。','Código no válido. Revísalo e inténtalo de nuevo.'],
+['Desconto de {p}% nos 3 primeiros meses: R$ {a}/mês, depois R$ {b}/mês.','{p}% off for the first 3 months: R$ {a}/month, then R$ {b}/month.','最初の3か月は{p}%オフ：月R$ {a}、その後は月R$ {b}。','前 3 个月优惠 {p}%：每月 R$ {a}，之后每月 R$ {b}。','前 3 個月優惠 {p}%：每月 R$ {a}，之後每月 R$ {b}。','{p}% de descuento los 3 primeros meses: R$ {a}/mes, luego R$ {b}/mes.'],
+['Código aplicado!','Code applied!','コードを適用しました！','代码已应用！','代碼已套用！','¡Código aplicado!'],
+['Anúncio','Ad','広告','广告','廣告','Anuncio']
+];
+ROWS.push(...ROWS2);
+const I18N={};UI.slice(1).forEach((l,i)=>{I18N[l]={};ROWS.forEach(r=>I18N[l][r[0]]=r[i+1])});
+ROWS.forEach((r,i)=>{if(ES[i])I18N.es[r[0]]=ES[i]});
+const tr=s=>(I18N[cfg.lang]||{})[s]||s;
+const ORIG=new WeakMap(),AT=new WeakMap();
+function trTx(n){const p=n.parentNode;if(p&&p.closest&&p.closest("script,style"))return;if(!ORIG.has(n))ORIG.set(n,n.nodeValue);const o=ORIG.get(n),k=o.trim();if(k)n.nodeValue=o.replace(k,()=>tr(k))}
+function trAt(e){let m=AT.get(e);for(const a of["placeholder","aria-label","title"]){if(e.hasAttribute(a)){m=m||{};if(!(a in m))m[a]=e.getAttribute(a);e.setAttribute(a,tr(m[a]))}}if(m)AT.set(e,m)}
+function trDom(root){
+ if(root.nodeType===3)return trTx(root);
+ if(root.nodeType!==1)return;
+ const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode())trTx(n);
+ trAt(root);root.querySelectorAll("[placeholder],[aria-label],[title]").forEach(trAt);
+}
+let cfg={...DEF};
+try{Object.assign(cfg,JSON.parse(localStorage.getItem("rt-cfg")||"{}"))}catch(e){}
+if(!cfg.lset||!UI.includes(cfg.lang))cfg.lang=detectLang();
+const save=()=>{try{localStorage.setItem("rt-cfg",JSON.stringify(cfg))}catch(e){}};
+function lum(h){const n=parseInt(h.slice(1),16),f=v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)};return .2126*f(n>>16)+.7152*f(n>>8&255)+.0722*f(n&255)}
+function apply(){
+ const r=document.documentElement,s=r.style;
+ s.setProperty("--ac",cfg.ac);s.setProperty("--on",lum(cfg.ac)>.5?"#111":"#fff");
+ s.setProperty("--fs",cfg.fs+"px");s.setProperty("--r",cfg.r+"px");
+ const cj=/^(ja|zh)/.test(cfg.lang);r.classList.toggle("cjk",cj);s.setProperty("--ff",(cj?CJK:"")+(FF[cfg.ff]||FF.sans));s.setProperty("--g",cfg.cp?"10px":"18px");
+ cfg.theme==="auto"?r.removeAttribute("data-theme"):r.setAttribute("data-theme",cfg.theme);
+ document.body.classList.toggle("cp",!!cfg.cp);
+ const nm=(cfg.name||"").trim()||"ResumoTube";
+ $("#brand").textContent=nm;document.title=nm;
+ $("#aff").hidden=!cfg.aff;$("#lang").value=cfg.lang;r.lang=HL[cfg.lang]||"en";
+ if(apply.l!==cfg.lang){apply.l=cfg.lang;trDom(document.body);quota();document.querySelector("meta[name=description]").content=tr("Cole um link do YouTube ou busque pelo tema. Você recebe resumo, momentos-chave e transcrição.");if(S.video)renderPanel()}
+}
+function syncCfg(){
+ document.querySelectorAll("[data-k]").forEach(e=>{const v=cfg[e.dataset.k];e.type==="checkbox"?e.checked=!!v:e.value=v});
+}
+function toast(t){const e=$("#toast");e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,2400)}
+
+/* ---------- API (simulada) ---------- */
+// TODO: inserir chave no backend. O front-end nunca guarda chaves.
+async function apiSearch(q){
+ // TODO: chamar seu backend (ex.: GET /api/search?q=...) que usa a YouTube Data API (search.list).
+ await sleep(700);
+ const T=[`${q}: guia completo para iniciantes`,`O que ninguém conta sobre ${q}`,`${q} em 10 minutos`,`${q}: erros comuns e como evitar`,`Aula completa de ${q}`,`${q} na prática, passo a passo`];
+ const D=[1260,615,600,880,3720,1540],H=[250,160,330,20,200,290];
+ return T.map((t,i)=>({id:"mock"+i,title:t,ch:"Canal Exemplo "+(i+1),dur:D[i],hue:H[i],real:false}));
+}
+async function apiTranscript(v){
+ // TODO: chamar seu backend (ex.: GET /api/transcript?id=...) que obtém apenas legendas disponíveis do vídeo.
+ await sleep(900);
+ const t=v.real?"o tema do vídeo":v.title.split(":")[0];
+ const L=[`Olá! Hoje vamos falar sobre ${t} e por que isso importa.`,`Primeiro, o conceito básico: o que ${t} significa na prática.`,`O erro mais comum é começar sem um objetivo claro.`,`Passo um: defina o que você quer alcançar com ${t}.`,`Passo dois: reúna as ferramentas e os materiais necessários.`,`Um exemplo real mostra como isso funciona no dia a dia.`,`Atenção ao custo: dá para começar gastando pouco.`,`Dica avançada: automatize as tarefas repetitivas.`,`Como medir os resultados e saber se está funcionando.`,`Perguntas frequentes: quanto tempo leva e quanto custa.`,`Resumo final: comece pequeno, teste rápido e ajuste sempre.`,`Obrigado por assistir! Deixe sua dúvida nos comentários.`];
+ const step=v.dur/L.length;
+ return L.map((x,i)=>({t:Math.floor(i*step),text:x}));
+}
+async function apiAI(task,payload){
+ // TODO: chamar seu backend (ex.: POST /api/ai) que fala com o modelo de IA. Aqui, a resposta é montada localmente.
+ await sleep(500);
+ return payload;
+}
+
+/* ---------- estado ---------- */
+const S={video:null,seg:[],tab:"resumo",len:"curto",used:0,hist:[],results:[],chat:[]};
+const parseId=s=>{const m=s.match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([\w-]{11})/);return m?m[1]:null};
+const quota=()=>$("#quota").textContent=`${tr("Hoje")}: ${S.used}/${LIMIT} ${tr("vídeos grátis")}`;
+const skel=()=>$("#out").innerHTML='<div class="sk" aria-label="Carregando"><div class="big"></div><div></div><div style="width:70%"></div><div style="width:85%"></div></div>';
+
+async function start(){
+ const v=$("#q").value.trim();if(!v)return toast("Cole um link ou digite um tema.");
+ if(/^https?:\/\//i.test(v)||/youtu/i.test(v)){
+  const id=parseId(v);if(!id)return toast("Link inválido. Use um link de vídeo do YouTube.");
+  return openVideo({id,title:"Vídeo do YouTube",ch:"youtube.com",dur:600,real:true});
+ }
+ skel();S.results=await apiSearch(v);
+ $("#out").innerHTML=`<h2>${tr("Resultados para")} “${esc(v)}”</h2>`+S.results.map((r,i)=>`<button class="res" data-open="${i}"><span class="th" style="background:linear-gradient(135deg,hsl(${r.hue} 60% 35%),hsl(${r.hue+40} 70% 55%))"><i>${fmt(r.dur)}</i></span><span><b>${esc(r.title)}</b><small>${esc(r.ch)}</small></span></button>`).join("");
+}
+async function openVideo(v){
+ const seen=S.hist.some(h=>h.id===v.id);
+ if(!seen&&S.used>=LIMIT){$("#prem").showModal();return}
+ skel();
+ S.seg=await apiTranscript(v);S.video=v;S.chat=[];S.tab="resumo";S.len=cfg.len;
+ if(!seen){S.used++;S.hist.unshift(v)}
+ quota();renderHist();renderVideo();
+ $("#out").scrollIntoView({behavior:"smooth"});
+}
+function playerHTML(start,auto){
+ const v=S.video;
+ if(v.real)return `<iframe title="Player do YouTube" src="https://www.youtube-nocookie.com/embed/${v.id}?start=${Math.floor(start)}${auto?"&autoplay=1":""}&rel=0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+ return `<div class="ph"><span>▶</span><b>Player oficial do YouTube</b><small>${tr("Simulado · posição")} ${fmt(start)}</small></div>`;
+}
+function jump(t){$("#player").innerHTML=playerHTML(t,true);$("#player").scrollIntoView({behavior:"smooth",block:"center"})}
+
+function renderVideo(){
+ const v=S.video;
+ $("#out").innerHTML=`<div id="player">${playerHTML(0,false)}</div>
+ <h2 style="margin-top:12px">${esc(v.title)}</h2><small style="color:var(--mu)">${esc(v.ch)}${v.real?"":" · "+fmt(v.dur)}</small>
+ <div class="card" style="margin-top:12px"><h3>Só a resposta</h3><div class="row"><input id="qa" type="text" aria-label="O que você quer saber do vídeo" placeholder="Ex.: quanto custa?"><button class="btn sm" id="qaGo">Buscar</button></div><div id="qaOut" style="margin-top:10px"></div></div>
+ <div class="tabs" role="tablist">${[["resumo","Resumo"],["momentos","Momentos-chave"],["transcricao","Transcrição"],["perguntas","Perguntas"]].map(([k,n])=>`<button role="tab" id="t_${k}" data-tab="${k}" aria-selected="${S.tab===k}">${n}</button>`).join("")}</div>
+ <div class="card" id="panel" role="tabpanel" style="border-top-left-radius:0;border-top-right-radius:0;border-top:0"></div>
+ <div class="tools"><button class="btn alt" data-x="md">Copiar Markdown</button><button class="btn alt" data-x="notion">Exportar para Notion</button><button class="btn alt" data-x="dlmd">Baixar .md</button></div>`;
+ renderPanel();
+}
+const sl=()=>cfg.slang==="auto"?cfg.lang:cfg.slang;
+function summary(len){
+ const g=i=>S.seg[i].text,pre=sl()==="pt"?"":tr("Simulação: a IA real traduziria este texto para o idioma escolhido.")+" ";
+ if(len==="curto")return[pre+g(1)+" "+g(10)];
+ if(len==="medio")return[pre,...[1,3,4,8,10].map(g)].filter(Boolean);
+ return[pre,...S.seg.slice(1,11).map(s=>`[${fmt(s.t)}] ${s.text}`)].filter(Boolean);
+}
+const MOM=[0,2,3,5,7,8,10];
+function renderPanel(){
+ const p=$("#panel"),k=S.tab;
+ document.querySelectorAll("[data-tab]").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===k));
+ if(k==="resumo"){
+  const L=[["curto","Curto"],["medio","Médio"],["detalhado","Detalhado"]],s=summary(S.len);
+  p.innerHTML=`<div class="seg">${L.map(([a,b])=>`<button data-len="${a}" aria-pressed="${S.len===a}">${b}</button>`).join("")}</div>`+(S.len==="curto"?`<p>${esc(s[0])}</p>`:`<ul>${s.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`);
+ }else if(k==="momentos"){
+  p.innerHTML=MOM.map(i=>`<button class="ts" data-jump="${S.seg[i].t}"><b>${fmt(S.seg[i].t)}</b><span>${esc(S.seg[i].text)}</span></button>`).join("");
+ }else if(k==="transcricao"){
+  p.innerHTML=`<div class="row"><input id="ts" type="text" aria-label="Buscar na transcrição" placeholder="Buscar na transcrição"></div><div class="tools"><button class="btn alt" data-x="cptx">Copiar</button><button class="btn alt" data-x="dltxt">Baixar .txt</button><button class="btn alt" data-x="dlsrt">Baixar .srt</button></div><div id="tl" style="margin-top:8px"></div>`;
+  tList("");
+ }else{
+  p.innerHTML=`<div id="chat">${S.chat.length?"":'<p style="color:var(--mu);margin:0 0 10px">Pergunte qualquer coisa sobre o vídeo.</p>'}${S.chat.map(m=>`<div class="msg ${m.r}">${m.h}</div>`).join("")}</div><div class="row"><input id="ci" type="text" aria-label="Sua pergunta" placeholder="Escreva sua pergunta"><button class="btn sm" id="cGo">Enviar</button></div>`;
+ }
+}
+function tList(q){
+ const re=q?new RegExp("("+q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","gi"):null;
+ const rows=S.seg.filter(s=>!q||s.text.toLowerCase().includes(q.toLowerCase()));
+ $("#tl").innerHTML=rows.length?rows.map(s=>{let h=esc(s.text);if(re)h=h.replace(re,"<mark>$1</mark>");return`<button class="ts" data-jump="${s.t}"><b>${fmt(s.t)}</b><span>${h}</span></button>`}).join(""):'<p style="color:var(--mu)">Nada encontrado nessa transcrição.</p>';
+}
+function find(q){
+ const w=q.toLowerCase().split(/\W+/).filter(x=>x.length>3);
+ let best=null,sc=0;
+ S.seg.forEach(s=>{const n=w.filter(x=>s.text.toLowerCase().includes(x)).length;if(n>sc){sc=n;best=s}});
+ return best;
+}
+async function justAnswer(){
+ const q=$("#qa").value.trim();if(!q)return toast("Digite o que você procura.");
+ const o=$("#qaOut");o.textContent="Procurando…";
+ const s=await apiAI("find",find(q));
+ o.innerHTML=s?`<button class="ts" data-jump="${s.t}" style="border:0"><b>${fmt(s.t)}</b><span>${esc(s.text)}<br><small style="color:var(--ac)">Toque para ir ao trecho</small></span></button>`:"Não encontrei isso no vídeo. Tente outras palavras.";
+}
+async function ask(){
+ const i=$("#ci"),q=i.value.trim();if(!q)return;
+ S.chat.push({r:"u",h:esc(q)});renderPanel();
+ const s=await apiAI("chat",find(q));
+ S.chat.push({r:"a",h:s?`${tr("Segundo o vídeo, aos")} ${fmt(s.t)}: “${esc(s.text)}”`:"Não encontrei isso no vídeo."});
+ renderPanel();$("#ci").focus();
+}
+
+/* ---------- exportar ---------- */
+const md=()=>`# ${S.video.title}\n\nCanal: ${S.video.ch}\n\n## Resumo\n${summary("detalhado").map(x=>"- "+x).join("\n")}\n\n## Momentos-chave\n${MOM.map(i=>`- [${fmt(S.seg[i].t)}] ${S.seg[i].text}`).join("\n")}\n`;
+const txt=()=>S.seg.map(s=>`[${fmt(s.t)}] ${s.text}`).join("\n");
+const srtT=s=>`${p2(Math.floor(s/3600))}:${p2(Math.floor(s%3600/60))}:${p2(s%60)},000`;
+const srt=()=>S.seg.map((s,i)=>`${i+1}\n${srtT(s.t)} --> ${srtT(S.seg[i+1]?S.seg[i+1].t:s.t+5)}\n${s.text}\n`).join("\n");
+async function copy(t,m){
+ try{await navigator.clipboard.writeText(t)}catch(e){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(_){}a.remove()}
+ toast(m||"Copiado!");
+}
+function dl(name,t){
+ try{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/plain"}));a.download=name;a.click();toast("Se o download não iniciar, use Copiar.")}catch(e){toast("Download indisponível aqui. Use Copiar.")}
+}
+function renderHist(){
+ $("#hist").hidden=!S.hist.length;
+ $("#histList").innerHTML=S.hist.map((h,i)=>`<button class="res" data-hist="${i}"><span><b>${esc(h.title)}</b><small>${esc(h.ch)}</small></span></button>`).join("");
+}
+
+/* ---------- eventos ---------- */
+$("#go").onclick=start;
+$("#q").addEventListener("keydown",e=>{if(e.key==="Enter")start()});
+$("#lang").onchange=e=>{cfg.lang=e.target.value;cfg.lset=true;save();apply();syncCfg()};
+document.addEventListener("click",e=>{
+ const t=e.target.closest("button");if(!t)return;
+ const d=t.dataset;
+ if(d.open!==undefined)openVideo(S.results[+d.open]);
+ else if(d.hist!==undefined)openVideo(S.hist[+d.hist]);
+ else if(d.tab){S.tab=d.tab;renderPanel()}
+ else if(d.len){S.len=d.len;renderPanel()}
+ else if(d.jump!==undefined)jump(+d.jump);
+ else if(d.x==="md")copy(md(),"Markdown copiado!");
+ else if(d.x==="notion")copy(md(),"Copiado! Cole direto em uma página do Notion.");
+ else if(d.x==="dlmd")dl("resumo.md",md());
+ else if(d.x==="cptx")copy(txt(),"Transcrição copiada!");
+ else if(d.x==="dltxt")dl("transcricao.txt",txt());
+ else if(d.x==="dlsrt")dl("legenda.srt",srt());
+ else if(t.id==="qaGo")justAnswer();
+ else if(t.id==="cGo")ask();
+});
+document.addEventListener("input",e=>{if(e.target.id==="ts")tList(e.target.value.trim())});
+document.addEventListener("keydown",e=>{
+ if(e.key!=="Enter")return;
+ if(e.target.id==="qa")justAnswer();else if(e.target.id==="ci")ask();
+});
+$("#bTheme").onclick=()=>{
+ const dark=cfg.theme==="dark"||(cfg.theme==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches);
+ cfg.theme=dark?"light":"dark";save();apply();syncCfg();
+};
+$("#bCfg").onclick=()=>{syncCfg();$("#cfgD").showModal()};
+$("#cfgOk").onclick=()=>$("#cfgD").close();
+$("#cfgReset").onclick=()=>{cfg={...DEF};cfg.lang=detectLang();save();apply();syncCfg();toast("Padrão restaurado.")};
+$("#cfgD").addEventListener("input",e=>{
+ const k=e.target.dataset.k;if(!k)return;
+ const t=e.target;cfg[k]=t.type==="checkbox"?t.checked:t.type==="range"?+t.value:t.value;if(k==="lang")cfg.lset=true;
+ apply();save();
+});
+$("#sw").innerHTML=COLORS.map(c=>`<button type="button" data-ac="${c}" style="background:${c}" aria-label="Cor ${c}"></button>`).join("")+'<label class="sr" for="c_ac">Cor personalizada</label><input type="color" id="c_ac" data-k="ac">';
+$("#sw").addEventListener("click",e=>{const b=e.target.closest("[data-ac]");if(!b)return;cfg.ac=b.dataset.ac;$("#c_ac").value=cfg.ac;apply();save()});
+$("#bPrem").onclick=()=>$("#prem").showModal();
+$("#premX").onclick=()=>$("#prem").close();
+// TODO: validar o código de parceiro no backend e aplicar o desconto no pagamento. Aqui é só demonstração (códigos no front-end ficam visíveis).
+const PARTNERS={PARCEIRO30:30},PRICE=19;
+function applyCode(){
+ const c=$('#pc').value.trim().toUpperCase(),m=$('#pcMsg');
+ if(!c){m.textContent='';S.partner=null;return}
+ const pct=PARTNERS[c];
+ if(!pct){S.partner=null;m.textContent=tr('Código inválido. Confira e tente de novo.');return}
+ S.partner={code:c,pct};
+ const a=(PRICE*(100-pct)/100).toLocaleString(HL[cfg.lang]||'pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+ m.textContent=tr('Código aplicado!')+' '+tr('Desconto de {p}% nos 3 primeiros meses: R$ {a}/mês, depois R$ {b}/mês.').replace('{p}',pct).replace('{a}',a).replace('{b}',PRICE);
+}
+$('#pcGo').onclick=applyCode;
+$('#pc').addEventListener('keydown',e=>{if(e.key==='Enter')applyCode()});
+$("#premGo").onclick=()=>{$("#prem").close();toast("Anotado! Avisaremos quando o Premium abrir.")};
+new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(trDom))).observe(document.body,{childList:true,subtree:true});
+apply();quota();
+</script>
+</body>
+</html>
